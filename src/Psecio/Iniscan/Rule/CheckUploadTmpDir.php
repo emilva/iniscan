@@ -38,7 +38,13 @@ class CheckUploadTmpDir extends \Psecio\Iniscan\Rule
 		if ($uploadTmpDir === 0) {
 			$uploadTmpDir = realpath(sys_get_temp_dir());
 		} else {
-			$uploadTmpDir = realpath($uploadTmpDir);
+			$paths = explode(':', $uploadTmpDir);
+			foreach ($paths as $path) {
+				$uploadTmpDir = realpath($path);
+				if ($uploadTmpDir === false) {
+					break;
+				}
+			}
 		}
 
 		// Make sure the folders are still valid

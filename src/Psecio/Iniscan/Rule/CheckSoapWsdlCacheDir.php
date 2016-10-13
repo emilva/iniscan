@@ -38,7 +38,13 @@ class CheckSoapWsdlCacheDir extends \Psecio\Iniscan\Rule
 		$wsdlCacheDir = $this->findValue('soap.wsdl_cache_dir', $ini);
 		if ($wsdlCacheDir !== 0 && $wsdlCacheDir)
 		{
-			$wsdlCacheDir = realpath($wsdlCacheDir);
+			$paths = explode(':', $wsdlCacheDir);
+			foreach ($paths as $path) {
+				$wsdlCacheDir = realpath($path);
+				if ($wsdlCacheDir === false) {
+					break;
+				}
+			}
 		}
 
 		// For CVE-2013-6501 we only care about PHP before 5.6.8
